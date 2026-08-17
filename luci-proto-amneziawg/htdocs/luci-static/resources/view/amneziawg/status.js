@@ -39,6 +39,17 @@ function timestampToStr(timestamp) {
 	}).format(date) + ' (' + ago + ')';
 }
 
+/* Since AmneziaWG 3.0 the keep alive interval may also be a `low-high' range,
+   in which case the actual interval is randomized within these bounds. */
+function keepAliveToStr(interval) {
+	if (!interval || interval == 'off' || interval == '0')
+		return E('em', _('none'));
+
+	return (String(interval).indexOf('-') > 0)
+		? _('every %s seconds', 'AmneziaWG keep alive interval range').format(interval)
+		: _('every %ds', 'AmneziaWG keep alive interval').format(+interval);
+}
+
 function handleInterfaceDetails(iface) {
 	ui.showModal(_('Instance Details'), [
 		ui.itemlist(E([]), [
@@ -66,7 +77,7 @@ function handlePeerDetails(peer) {
 			_('Received Data'), '%1024mB'.format(peer.transfer_rx),
 			_('Transmitted Data'), '%1024mB'.format(peer.transfer_tx),
 			_('Latest Handshake'), timestampToStr(+peer.latest_handshake),
-			_('Keep-Alive'), (peer.persistent_keepalive != 'off') ? _('every %ds', 'AmneziaWG keep alive interval').format(+peer.persistent_keepalive) : E('em', _('none')),
+			_('Keep-Alive'), keepAliveToStr(peer.persistent_keepalive),
 		]),
 		E('div', { 'class': 'right' }, [
 			E('button', {
