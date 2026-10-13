@@ -229,7 +229,8 @@ Key differences between the workflows:
 2. The new workflow uses the SDK instead of building the toolchain from scratch.
 3. The new workflow consists of a single step instead of two.
 4. The new workflow also compiles the localization package.
-5. The new workflow does not calculate `vermagic` value (see below).
+
+Both workflows record the `vermagic` value on the `Vermagic:` line of `build-info.txt` within the artifacts (see below).
 
 #### How to Use the New Workflow
 
@@ -308,6 +309,6 @@ Steps:
 > **Note:** You may need to clear your browser cache to see the new protocol available in OpenWRT.
 
 #### Vermagic control for `SNAPSHOT` versions
-> **Note:** The prebuilt `release` and `snapshot` archives record the `vermagic` in `build-info.txt`. Among the compile-it-yourself workflows only the **legacy** one computes it; the `New - Build AmneziaWG from SDK` workflow does not.
+> **Note:** Every workflow records the `vermagic` on the `Vermagic:` line of `build-info.txt` within the artifacts — the prebuilt `release` and `snapshot` archives as well as both compile-it-yourself workflows (`New - Build AmneziaWG from SDK` and the legacy one).
 
-Vermagic is a hash calculated for the OpenWRT kernel. When installing kernel-related packages, OpenWRT checks if the package's `vermagic` matches the kernel's. If not, installation won't succeed. Since `SNAPSHOT` versions update daily, `vermagic` values may differ. Check your firmware's `vermagic` by running `apk info kernel` or `opkg info kernel` and noting the hash after the kernel version in `Version`. For example, `6.6.52~f58afd3748410d3b1baa06a466d6682-r1` means `vermagic` is `f58afd3748410d3b1baa06a466d6682`. For the prebuilt archives the compiled package's `vermagic` value is recorded on the `Vermagic:` line of `build-info.txt`; in the legacy workflow it is placed in a separate `vermagic` file within the artifacts. If these do not match, the kernel module cannot be installed.
+Vermagic is a hash calculated for the OpenWRT kernel. When installing kernel-related packages, OpenWRT checks if the package's `vermagic` matches the kernel's. If not, installation won't succeed. Since `SNAPSHOT` versions update daily, `vermagic` values may differ. Check your firmware's `vermagic` by running `apk info kernel` or `opkg info kernel` and noting the hash after the kernel version in `Version`. For example, `6.6.52~f58afd3748410d3b1baa06a466d6682-r1` means `vermagic` is `f58afd3748410d3b1baa06a466d6682`. Every workflow records the compiled package's `vermagic` value on the `Vermagic:` line of `build-info.txt` within the artifacts. If these do not match, the kernel module cannot be installed.
